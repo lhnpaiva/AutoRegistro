@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526797112270",
+    "project_id": "autoregistro-8a173",
+    "storage_bucket": "autoregistro-8a173.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526797112270:android:fd272e6de14d87a4a1219f",
+        "android_client_info": {
+          "package_name": "com.lhnpaiva.autoregistro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbwxlGLC0AeO1JKoUWOsms44S5IINx7mI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

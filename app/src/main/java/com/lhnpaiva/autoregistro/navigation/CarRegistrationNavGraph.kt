@@ -22,9 +22,9 @@ internal fun CarRegistrationNavGraph(
         navController = navController,
         startDestination = startDestination
     ) {
-        addHomeNavGraph(navController)
-
         addLoginNavGraph(navController)
+
+        addHomeNavGraph(navController)
     }
 }
 
