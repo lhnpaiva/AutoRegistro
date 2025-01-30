@@ -1,6 +1,7 @@
 package com.lhnpaiva.autoregistro.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.lhnpaiva.autoregistro.routes.CreditRenegotiationRoutes
@@ -22,7 +23,9 @@ internal fun CarRegistrationNavGraph(
         navController = navController,
         startDestination = startDestination
     ) {
-        addLoginNavGraph(navController)
+        addLoginNavGraph(navController) {
+            navController.navigate(NavGraphs.HOME)
+        }
 
         addHomeNavGraph(navController)
     }

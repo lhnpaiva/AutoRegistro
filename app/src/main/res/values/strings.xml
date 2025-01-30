@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">AutoRegistro</string>
+
+    <!-- Home Screen -->
+    <string name = "home_title">seus veículos</string>
+    <string name = "home_maintenance_section_title">Manutenções previstas de %s</string>
+    <string name = "home_maintenance_without_items">Nenhuma manutenção cadastrada.</string>">
+    <string name = "home_car_card">Veículo</string>">
+    <string name = "home_car_card_plate">Placa: %s</string>">
+    <string name = "home_car_card_mileage">Km: %s</string>">
+    <string name = "home_add_new_car_icon">Adicionar novo veículo</string>">
+    <string name = "home_add_new_car">Adicionar Veículo</string>">
+    <string name = "home_alert_content_description">Alerta</string>">
+    <string name = "home_maintenance_planned">Previsto para: %s km</string>">
+    <string name = "home_fuel_card">Abastecer</string>">
+    <string name = "home_maintenance_card">Manutenção</string>">
+    <string name = "home_expense_card">Despesa"</string>
 </resources>

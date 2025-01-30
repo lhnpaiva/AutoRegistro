@@ -14,7 +14,10 @@ internal fun NavGraphBuilder.addHomeNavGraph(
         startDestination = Routes.HOME
     ) {
         composable(Routes.HOME) {
-            HomeScreen()
+            HomeScreen(
+                onBackClick = { navController.popBackStack() },
+                onHelpClick = { }
+            )
         }
     }
 }

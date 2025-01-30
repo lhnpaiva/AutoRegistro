@@ -1,6 +1,5 @@
-package com.lhnpaiva.autoregistro.presentation.login
+package com.lhnpaiva.autoregistro.presentation.register
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,17 +35,16 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel(),
-    navigateToHome: () -> Unit,
-    navigateToRegister: () -> Unit
+fun RegisterScreen(
+    viewModel: RegisterViewModel = koinViewModel(),
+    navigateToHome: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
             when (event) {
-                LoginUiEvent.LoginSuccess -> navigateToHome()
+                RegisterUiEvent.RegisterSuccess -> navigateToHome()
             }
         }
     }
@@ -73,33 +71,10 @@ fun LoginScreen(
                 horizontalAlignment = CenterHorizontally,
                 modifier = Modifier.padding(horizontal = 12.dp)
             ) {
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    MainCurvedButton(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
-                        backgroundColor = PrimaryColor,
-                        text = "Fazer login com o Google",
-                        textColor = WhiteColor,
-                        onClick = {})
-                }
-
-                Spacer(modifier = Modifier.size(16.dp))
-
-                Text(
-                    text = "ou",
-                    color = WhiteColor
-                )
-
-                Spacer(modifier = Modifier.size(16.dp))
-
                 OutlinedTextField(
                     value = uiState.email,
                     onValueChange = uiState.onEmailChange,
-                    Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12),
                     label = {
                         Text(
@@ -137,7 +112,24 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.size(16.dp))
 
-                Text(text = "Esqueci minha senha", color = WhiteColor)
+                OutlinedTextField(
+                    value = uiState.confirmedPassword,
+                    onValueChange = uiState.onConfirmPasswordChange,
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12),
+                    label = {
+                        Text(
+                            text = "Confirmar Senha",
+                            color = PrimaryColor
+                        )
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = PrimaryColor,
+                        unfocusedBorderColor = GrayColor,
+                        containerColor = WhiteColor.copy(alpha = 0.75f)
+                    ),
+                )
 
                 Spacer(modifier = Modifier.size(16.dp))
 
@@ -145,24 +137,18 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    MainCurvedButton(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
+                    MainCurvedButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp),
                         backgroundColor = PrimaryColor,
-                        text = "Continuar",
+                        text = "Registrar",
                         onClick = {
                             scope.launch {
-                                viewModel.login()
+                                viewModel.register()
                             }
-                        })
-                }
-
-                Spacer(modifier = Modifier.size(8.dp))
-
-                Box(Modifier.clickable {
-                    navigateToRegister()
-                }) {
-                    Text(text = "Não possui conta? Cadastre-se aqui", color = WhiteColor)
+                        }
+                    )
                 }
 
                 Spacer(modifier = Modifier.size(16.dp))
