@@ -47,45 +47,49 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.lhnpaiva.autoregistro.R
-import com.lhnpaiva.autoregistro.domain.model.Gasto
-import com.lhnpaiva.autoregistro.domain.model.Veiculo
+import com.lhnpaiva.autoregistro.domain.model.Expense
+import com.lhnpaiva.autoregistro.domain.model.Vehicle
 import com.lhnpaiva.autoregistro.presentation.components.MainToolbar
 import com.lhnpaiva.autoregistro.presentation.theme.GrayColor
 import com.lhnpaiva.autoregistro.presentation.theme.PrimaryColor
 import com.lhnpaiva.autoregistro.presentation.theme.WhiteColor
 
-val sampleVeiculos = listOf(
-    Veiculo(
+val sampleVehicles = listOf(
+    Vehicle(
         id = 1,
-        nome = "Carro A",
-        modelo = "Modelo X",
-        placa = "ABC-1234",
-        quilometragem = 50000,
-        gastos = listOf(
-            Gasto(id = 1, descricao = "Troca de Óleo", kmPrevisto = 51000, urgente = true),
-            Gasto(id = 2, descricao = "Revisão de Freios", kmPrevisto = 52000, urgente = false)
+        name = "Car A",
+        model = "Model X",
+        plate = "ABC-1234",
+        km = 50000,
+        expenses = listOf(
+            Expense(id = 1, description = "Troca de óleo", predictedKm = 51000, isUrgent = true),
+            Expense(
+                id = 2,
+                description = "Verificação de freios",
+                predictedKm = 52000,
+                isUrgent = false
+            )
         )
     ),
-    Veiculo(
+    Vehicle(
         id = 2,
-        nome = "Carro B",
-        modelo = "Modelo Y",
-        placa = "DEF-5678",
-        quilometragem = 75000,
-        gastos = listOf(
-            Gasto(id = 3, descricao = "Alinhamento", kmPrevisto = 76000, urgente = false),
-            Gasto(id = 4, descricao = "Troca de Pneus", kmPrevisto = 80000, urgente = true)
+        name = "Car B",
+        model = "Model Y",
+        plate = "DEF-5678",
+        km = 75000,
+        expenses = listOf(
+            Expense(id = 3, description = "Alinhamento", predictedKm = 76000, isUrgent = false),
+            Expense(id = 4, description = "Troca de pneus", predictedKm = 80000, isUrgent = true)
         )
     )
 )
 
 @Composable
-internal fun HomeScreen(
+fun HomeScreen(
     onBackClick: () -> Unit,
     onHelpClick: () -> Unit
 ) {
-    var veiculoSelecionado by remember { mutableStateOf(sampleVeiculos.first()) }
-    var veiculosList by remember { mutableStateOf(sampleVeiculos) }
+    var selectedVehicle by remember { mutableStateOf(sampleVehicles.first()) }
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -113,17 +117,17 @@ internal fun HomeScreen(
                         .padding(vertical = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(veiculosList) { veiculo ->
-                        VeiculoCard(
-                            veiculo = veiculo,
-                            isSelected = veiculo.id == veiculoSelecionado.id,
-                            onClick = { veiculoSelecionado = veiculo }
+                    items(sampleVehicles) { vehicle ->
+                        VehicleCard(
+                            vehicle = vehicle,
+                            isSelected = vehicle.id == selectedVehicle.id,
+                            onClick = { selectedVehicle = vehicle }
                         )
                     }
                     item {
-                        AddVeiculoCard(
+                        AddVehicleCard(
                             onClick = {
-                                // Implementar a lógica para adicionar um novo veículo
+
                             }
                         )
                     }
@@ -134,7 +138,7 @@ internal fun HomeScreen(
                 SectionTitle(
                     title = stringResource(
                         id = R.string.home_maintenance_section_title,
-                        veiculoSelecionado
+                        selectedVehicle.name
                     )
                 )
 
@@ -143,15 +147,15 @@ internal fun HomeScreen(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    if (veiculoSelecionado.gastos.isEmpty()) {
+                    if (selectedVehicle.expenses.isEmpty()) {
                         Text(
                             text = stringResource(id = R.string.home_maintenance_without_items),
                             style = MaterialTheme.typography.bodyMedium,
                             color = PrimaryColor
                         )
                     } else {
-                        veiculoSelecionado.gastos.forEach { manutencao ->
-                            ManutencaoItem(manutencao)
+                        selectedVehicle.expenses.forEach { expense ->
+                            MaintenanceItem(expense)
                         }
                     }
                 }
@@ -183,8 +187,8 @@ fun SectionTitle(title: String) {
 }
 
 @Composable
-fun VeiculoCard(
-    veiculo: Veiculo,
+fun VehicleCard(
+    vehicle: Vehicle,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -217,14 +221,14 @@ fun VeiculoCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = veiculo.nome,
+                text = vehicle.name,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = if (isSelected) WhiteColor else PrimaryColor
             )
 
             Text(
-                text = veiculo.modelo,
+                text = vehicle.model,
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (isSelected) WhiteColor.copy(alpha = 0.9f) else PrimaryColor
             )
@@ -232,13 +236,13 @@ fun VeiculoCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = stringResource(id = R.string.home_car_card_plate, veiculo.placa),
+                text = stringResource(id = R.string.home_car_card_plate, vehicle.plate),
                 style = MaterialTheme.typography.bodySmall,
                 color = if (isSelected) WhiteColor.copy(alpha = 0.9f) else PrimaryColor
             )
 
             Text(
-                text = stringResource(id = R.string.home_car_card_mileage, veiculo.quilometragem),
+                text = stringResource(id = R.string.home_car_card_mileage, vehicle.km),
                 style = MaterialTheme.typography.bodySmall,
                 color = if (isSelected) WhiteColor.copy(alpha = 0.9f) else PrimaryColor
             )
@@ -247,9 +251,7 @@ fun VeiculoCard(
 }
 
 @Composable
-fun AddVeiculoCard(
-    onClick: () -> Unit
-) {
+fun AddVehicleCard(onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .width(220.dp)
@@ -294,17 +296,16 @@ fun AddVeiculoCard(
 }
 
 @Composable
-fun ManutencaoItem(gasto: Gasto) {
-    val isUrgente = gasto.urgente
+fun MaintenanceItem(expense: Expense) {
+    val isUrgent = expense.isUrgent
 
-    val containerColor = if (isUrgente) PrimaryColor else WhiteColor
-    val iconColor = if (isUrgente) WhiteColor else PrimaryColor
-    val textColor = if (isUrgente) WhiteColor else PrimaryColor
-    val subTextColor = if (isUrgente) WhiteColor.copy(alpha = 0.8f) else GrayColor
+    val containerColor = if (isUrgent) PrimaryColor else WhiteColor
+    val iconColor = if (isUrgent) WhiteColor else PrimaryColor
+    val textColor = if (isUrgent) WhiteColor else PrimaryColor
+    val subTextColor = if (isUrgent) WhiteColor.copy(alpha = 0.8f) else GrayColor
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = containerColor
         ),
@@ -316,7 +317,7 @@ fun ManutencaoItem(gasto: Gasto) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = if (isUrgente) Icons.Default.Warning else Icons.Default.Info,
+                imageVector = if (isUrgent) Icons.Default.Warning else Icons.Default.Info,
                 contentDescription = stringResource(id = R.string.home_alert_content_description),
                 tint = iconColor,
                 modifier = Modifier.size(24.dp)
@@ -324,14 +325,17 @@ fun ManutencaoItem(gasto: Gasto) {
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    text = gasto.descricao,
+                    text = expense.description,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = textColor
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(id = R.string.home_maintenance_planned, gasto.kmPrevisto),
+                    text = stringResource(
+                        id = R.string.home_maintenance_planned,
+                        expense.predictedKm
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = subTextColor
                 )
@@ -350,17 +354,17 @@ fun QuickActionsRow() {
         QuickActionButton(
             icon = Icons.Default.LocalGasStation,
             label = stringResource(id = R.string.home_fuel_card),
-            onClick = { /* Ação de Abastecimento */ }
+            onClick = { /* Fuel Action */ }
         )
         QuickActionButton(
             icon = Icons.Default.Build,
             label = stringResource(id = R.string.home_maintenance_card),
-            onClick = { /* Ação de Manutenção */ }
+            onClick = { /* Maintenance Action */ }
         )
         QuickActionButton(
             icon = Icons.Default.History,
             label = stringResource(id = R.string.home_expense_card),
-            onClick = { /* Ação de Despesa */ }
+            onClick = { /* Expense Action */ }
         )
     }
 }
